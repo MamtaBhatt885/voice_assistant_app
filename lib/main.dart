@@ -15,6 +15,9 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'Luffy',
       theme: ThemeData.light(useMaterial3: true).copyWith(
+        appBarTheme: AppBarTheme(
+          color: Pallete.whiteColor
+        ),
         scaffoldBackgroundColor: Pallete.whiteColor,
       ),
       home: const HomePage(),
