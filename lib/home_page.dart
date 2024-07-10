@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:speech_to_text/speech_recognition_result.dart';
 import 'package:speech_to_text/speech_to_text.dart';
@@ -13,45 +12,25 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  final SpeechToText speechToText = SpeechToText();
-  String lastWords = '';
+  final SpeechToText _speechToText = SpeechToText();
+
+  bool _speechEnabled = false;
 
   @override
   void initState() {
     super.initState();
-    initSpeechToText();
+    initSpeech();
   }
 
-  Future<void> initSpeechToText() async {
-    bool available = await speechToText.initialize();
-    if (!available) {
-      // Handle the case where the speech recognizer is not available
-      print('Speech recognition not available');
-    }
-    setState(() {});
+  void initSpeech() async{
+   _speechEnabled =  await _speechToText.initialize();
+   setState(() {
+
+   });
   }
 
-  Future<void> startListening() async {
-    await speechToText.listen(onResult: onSpeechResult);
-    setState(() {});
-  }
 
-  Future<void> stopListening() async {
-    await speechToText.stop();
-    setState(() {});
-  }
 
-  void onSpeechResult(SpeechRecognitionResult result) {
-    setState(() {
-      lastWords = result.recognizedWords;
-    });
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
-    speechToText.stop();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -64,7 +43,6 @@ class _HomePageState extends State<HomePage> {
       body: SingleChildScrollView(
         child: Column(
           children: [
-            // virtual assistant picture
             Center(
               child: Stack(
                 children: [
@@ -94,12 +72,8 @@ class _HomePageState extends State<HomePage> {
                 ],
               ),
             ),
-            // chat bubble
             Container(
-              padding: EdgeInsets.symmetric(
-                horizontal: 20,
-                vertical: 10,
-              ),
+              padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
               margin: EdgeInsets.symmetric(horizontal: 40).copyWith(top: 10),
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(16),
@@ -133,7 +107,6 @@ class _HomePageState extends State<HomePage> {
                 ),
               ),
             ),
-            // features list
             Column(
               children: [
                 FeatureBox(
@@ -158,15 +131,7 @@ class _HomePageState extends State<HomePage> {
       ),
       floatingActionButton: FloatingActionButton(
         backgroundColor: Pallete.firstSuggestionBoxColor,
-        onPressed: () async {
-          if (await speechToText.hasPermission && !speechToText.isListening) {
-            await startListening();
-          } else if (speechToText.isListening) {
-            await stopListening();
-          } else {
-            await initSpeechToText();
-          }
-        },
+        onPressed: (){},
         child: Icon(Icons.mic),
       ),
     );
